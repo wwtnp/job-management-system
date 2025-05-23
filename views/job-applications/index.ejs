@@ -1,0 +1,92 @@
+<h1 class="mb-4">求职申请管理</h1>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="fas fa-handshake me-2"></i>求职申请列表</span>
+    <a href="/job-applications/add" class="btn btn-primary btn-sm">
+      <i class="fas fa-plus me-1"></i>添加申请
+    </a>
+  </div>
+  <div class="card-body">
+    <% if(applications && applications.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>申请ID</th>
+              <th>求职者</th>
+              <th>职位</th>
+              <th>申请日期</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% applications.forEach(application => { %>
+              <tr>
+                <td><%= application.application_id %></td>
+                <td><a href="/job-seekers/view/<%= application.seeker_id %>"><%= application.seeker_name %></a></td>
+                <td><a href="/jobs/view/<%= application.job_id %>"><%= application.job_title %></a></td>
+                <td><%= new Date(application.application_date).toLocaleDateString() %></td>
+                <td>
+                  <% if(application.status === 1) { %>
+                    <span class="badge bg-success">已匹配</span>
+                  <% } else if(application.status === 2) { %>
+                    <span class="badge bg-danger">已拒绝</span>
+                  <% } else { %>
+                    <span class="badge bg-warning">待处理</span>
+                  <% } %>
+                </td>
+                <td>
+                  <a href="/job-applications/view/<%= application.application_id %>" class="btn btn-sm btn-primary">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a href="/job-applications/edit/<%= application.application_id %>" class="btn btn-sm btn-info text-white">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <button class="btn btn-sm btn-danger delete-application" data-id="<%= application.application_id %>">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <p class="text-center">暂无求职申请数据</p>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 删除求职申请事件
+    document.querySelectorAll('.delete-application').forEach(button => {
+      button.addEventListener('click', function() {
+        const applicationId = this.getAttribute('data-id');
+        if(confirm('确定要删除此求职申请吗？')) {
+          fetch(`/job-applications/delete/${applicationId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if(data.success) {
+              alert('删除成功');
+              location.reload();
+            } else {
+              alert('删除失败: ' + data.message);
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('删除请求失败');
+          });
+        }
+      });
+    });
+  });
+</script> 

@@ -1,0 +1,94 @@
+<h1 class="mb-4">职位管理</h1>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="fas fa-briefcase me-2"></i>职位列表</span>
+    <a href="/jobs/add" class="btn btn-primary btn-sm">
+      <i class="fas fa-plus me-1"></i>添加职位
+    </a>
+  </div>
+  <div class="card-body">
+    <% if(jobs && jobs.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>职位名称</th>
+              <th>职业类别</th>
+              <th>用人单位</th>
+              <th>需求人数/已聘</th>
+              <th>薪资</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% jobs.forEach(job => { %>
+              <tr>
+                <td><%= job.title %></td>
+                <td><%= job.category_name %></td>
+                <td><%= job.employer_name %></td>
+                <td><%= job.required_number %>/<%= job.hired_number %></td>
+                <td><%= job.salary || '面议' %></td>
+                <td>
+                  <% if(job.status === 'active') { %>
+                    <span class="badge bg-success">招聘中</span>
+                  <% } else if(job.status === 'filled') { %>
+                    <span class="badge bg-info">已满</span>
+                  <% } else { %>
+                    <span class="badge bg-secondary">已关闭</span>
+                  <% } %>
+                </td>
+                <td>
+                  <a href="/jobs/view/<%= job.job_id %>" class="btn btn-sm btn-primary">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a href="/jobs/edit/<%= job.job_id %>" class="btn btn-sm btn-info text-white">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <button class="btn btn-sm btn-danger delete-job" data-id="<%= job.job_id %>">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <p class="text-center">暂无职位数据</p>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 删除职位事件
+    document.querySelectorAll('.delete-job').forEach(button => {
+      button.addEventListener('click', function() {
+        const jobId = this.getAttribute('data-id');
+        if(confirm('确定要删除此职位吗？这将同时删除与此职位相关的所有申请记录！')) {
+          fetch(`/jobs/delete/${jobId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if(data.success) {
+              alert('删除成功');
+              location.reload();
+            } else {
+              alert('删除失败: ' + data.message);
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('删除请求失败');
+          });
+        }
+      });
+    });
+  });
+</script> 

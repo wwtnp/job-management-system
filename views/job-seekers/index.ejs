@@ -1,0 +1,92 @@
+<h1 class="mb-4">求职者管理</h1>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="fas fa-user me-2"></i>求职者列表</span>
+    <a href="/job-seekers/add" class="btn btn-primary btn-sm">
+      <i class="fas fa-plus me-1"></i>添加求职者
+    </a>
+  </div>
+  <div class="card-body">
+    <% if(seekers && seekers.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>姓名</th>
+              <th>性别</th>
+              <th>联系电话</th>
+              <th>学历</th>
+              <th>聘用状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% seekers.forEach(seeker => { %>
+              <tr>
+                <td><%= seeker.name %></td>
+                <td><%= seeker.gender === 'M' ? '男' : '女' %></td>
+                <td><%= seeker.phone %></td>
+                <td><%= seeker.education || '未填写' %></td>
+                <td>
+                  <% if(seeker.hired_status === 1) { %>
+                    <span class="badge bg-success">已聘用</span>
+                  <% } else if(seeker.hired_status === 2) { %>
+                    <span class="badge bg-danger">聘用失败</span>
+                  <% } else { %>
+                    <span class="badge bg-secondary">未聘用</span>
+                  <% } %>
+                </td>
+                <td>
+                  <a href="/job-seekers/view/<%= seeker.seeker_id %>" class="btn btn-sm btn-primary">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a href="/job-seekers/edit/<%= seeker.seeker_id %>" class="btn btn-sm btn-info text-white">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <button class="btn btn-sm btn-danger delete-seeker" data-id="<%= seeker.seeker_id %>">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <p class="text-center">暂无求职者数据</p>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 删除求职者事件
+    document.querySelectorAll('.delete-seeker').forEach(button => {
+      button.addEventListener('click', function() {
+        const seekerId = this.getAttribute('data-id');
+        if(confirm('确定要删除此求职者吗？这将同时删除与此求职者相关的所有申请记录！')) {
+          fetch(`/job-seekers/delete/${seekerId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if(data.success) {
+              alert('删除成功');
+              location.reload();
+            } else {
+              alert('删除失败: ' + data.message);
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('删除请求失败');
+          });
+        }
+      });
+    });
+  });
+</script> 

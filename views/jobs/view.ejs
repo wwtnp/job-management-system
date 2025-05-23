@@ -1,0 +1,124 @@
+<h1 class="mb-4">职位详情</h1>
+
+<div class="row">
+  <!-- 基本信息 -->
+  <div class="col-lg-6 mb-4">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="fas fa-info-circle me-2"></i>基本信息</span>
+        <a href="/jobs/edit/<%= job.job_id %>" class="btn btn-sm btn-primary">
+          <i class="fas fa-edit me-1"></i>编辑
+        </a>
+      </div>
+      <div class="card-body">
+        <table class="table">
+          <tr>
+            <th style="width: 120px;">职位名称</th>
+            <td><%= job.title %></td>
+          </tr>
+          <tr>
+            <th>职业类别</th>
+            <td><%= job.category_name %></td>
+          </tr>
+          <tr>
+            <th>用人单位</th>
+            <td><a href="/employers/view/<%= job.employer_id %>"><%= job.employer_name %></a></td>
+          </tr>
+          <tr>
+            <th>职位描述</th>
+            <td><%= job.description || '无' %></td>
+          </tr>
+          <tr>
+            <th>需求人数</th>
+            <td><%= job.required_number %></td>
+          </tr>
+          <tr>
+            <th>已聘人数</th>
+            <td><%= job.hired_number %></td>
+          </tr>
+          <tr>
+            <th>薪资</th>
+            <td><%= job.salary || '面议' %></td>
+          </tr>
+          <tr>
+            <th>工作地点</th>
+            <td><%= job.location || '未指定' %></td>
+          </tr>
+          <tr>
+            <th>发布日期</th>
+            <td><%= new Date(job.post_date).toLocaleDateString() %></td>
+          </tr>
+          <tr>
+            <th>状态</th>
+            <td>
+              <% if(job.status === 'active') { %>
+                <span class="badge bg-success">招聘中</span>
+              <% } else if(job.status === 'filled') { %>
+                <span class="badge bg-info">已满</span>
+              <% } else { %>
+                <span class="badge bg-secondary">已关闭</span>
+              <% } %>
+            </td>
+          </tr>
+          <tr>
+            <th>备注</th>
+            <td><%= job.remarks || '无' %></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 申请者信息 -->
+  <div class="col-lg-6 mb-4">
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-users me-2"></i>申请者列表
+      </div>
+      <div class="card-body">
+        <% if(applications && applications.length > 0) { %>
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>姓名</th>
+                  <th>申请日期</th>
+                  <th>状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% applications.forEach(application => { %>
+                  <tr>
+                    <td><%= application.seeker_name %></td>
+                    <td><%= new Date(application.application_date).toLocaleDateString() %></td>
+                    <td>
+                      <% if(application.status === 1) { %>
+                        <span class="badge bg-success">已匹配</span>
+                      <% } else if(application.status === 2) { %>
+                        <span class="badge bg-danger">已拒绝</span>
+                      <% } else { %>
+                        <span class="badge bg-warning">待处理</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <a href="/job-applications/view/<%= application.application_id %>" class="btn btn-sm btn-primary">
+                        <i class="fas fa-eye"></i>
+                      </a>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <p class="text-center">暂无申请者</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-between">
+  <a href="/jobs" class="btn btn-secondary">返回列表</a>
+</div> 

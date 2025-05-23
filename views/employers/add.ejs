@@ -1,0 +1,51 @@
+<h1 class="mb-4">添加用人单位</h1>
+
+<div class="card">
+  <div class="card-header">
+    <i class="fas fa-plus-circle me-2"></i>新增用人单位
+  </div>
+  <div class="card-body">
+    <!-- 错误提示 -->
+    <% if(typeof errors !== 'undefined' && errors.length > 0) { %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+
+    <form action="/employers/add" method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label">单位名称 <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="name" name="name" required
+               value="<%= typeof formData !== 'undefined' ? formData.name : '' %>">
+      </div>
+      <div class="mb-3">
+        <label for="contact_person" class="form-label">联系人</label>
+        <input type="text" class="form-control" id="contact_person" name="contact_person"
+               value="<%= typeof formData !== 'undefined' ? formData.contact_person : '' %>">
+      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">联系电话 <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="phone" name="phone" required
+               value="<%= typeof formData !== 'undefined' ? formData.phone : '' %>">
+      </div>
+      <div class="mb-3">
+        <label for="address" class="form-label">地址</label>
+        <input type="text" class="form-control" id="address" name="address"
+               value="<%= typeof formData !== 'undefined' ? formData.address : '' %>">
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">电子邮箱 <span class="text-danger">*</span></label>
+        <input type="email" class="form-control" id="email" name="email" required
+               value="<%= typeof formData !== 'undefined' ? formData.email : '' %>">
+      </div>
+      <div class="d-flex justify-content-between">
+        <a href="/employers" class="btn btn-secondary">取消</a>
+        <button type="submit" class="btn btn-primary">保存</button>
+      </div>
+    </form>
+  </div>
+</div> 

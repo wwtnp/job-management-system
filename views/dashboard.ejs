@@ -1,0 +1,173 @@
+<h1 class="mb-4">职业介绍信息管理系统</h1>
+
+<!-- 统计卡片 -->
+<div class="row mb-4">
+  <div class="col-md-4 col-sm-6 mb-3">
+    <div class="stats-card">
+      <i class="fas fa-briefcase fa-2x text-primary"></i>
+      <h2><%= stats.jobCount %></h2>
+      <p>职位总数</p>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-6 mb-3">
+    <div class="stats-card">
+      <i class="fas fa-user fa-2x text-success"></i>
+      <h2><%= stats.seekerCount %></h2>
+      <p>求职者总数</p>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-6 mb-3">
+    <div class="stats-card">
+      <i class="fas fa-building fa-2x text-info"></i>
+      <h2><%= stats.employerCount %></h2>
+      <p>用人单位总数</p>
+    </div>
+  </div>
+  <div class="col-md-6 col-sm-6 mb-3">
+    <div class="stats-card">
+      <i class="fas fa-handshake fa-2x text-warning"></i>
+      <h2><%= stats.applicationCount %></h2>
+      <p>求职申请总数</p>
+    </div>
+  </div>
+  <div class="col-md-6 col-sm-6 mb-3">
+    <div class="stats-card">
+      <i class="fas fa-check-circle fa-2x text-success"></i>
+      <h2><%= stats.successfulMatches %></h2>
+      <p>成功匹配数</p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <!-- 最近职位 -->
+  <div class="col-md-6 mb-4">
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-briefcase me-2"></i>最新职位
+      </div>
+      <div class="card-body">
+        <% if(recentJobs && recentJobs.length > 0) { %>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>职位名称</th>
+                  <th>用人单位</th>
+                  <th>需求/已聘</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% recentJobs.forEach(job => { %>
+                  <tr>
+                    <td><%= job.title %></td>
+                    <td><%= job.employer_name %></td>
+                    <td><%= job.required_number %>/<%= job.hired_number %></td>
+                    <td>
+                      <a href="/jobs/view/<%= job.job_id %>" class="btn btn-sm btn-primary">
+                        <i class="fas fa-eye"></i>
+                      </a>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-end mt-3">
+            <a href="/jobs" class="btn btn-outline-primary">查看全部</a>
+          </div>
+        <% } else { %>
+          <p class="text-center">暂无职位信息</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <!-- 最近申请 -->
+  <div class="col-md-6 mb-4">
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-handshake me-2"></i>最新求职申请
+      </div>
+      <div class="card-body">
+        <% if(recentApplications && recentApplications.length > 0) { %>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>求职者</th>
+                  <th>职位</th>
+                  <th>状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% recentApplications.forEach(application => { %>
+                  <tr>
+                    <td><%= application.seeker_name %></td>
+                    <td><%= application.job_title %></td>
+                    <td>
+                      <% if(application.status === 1) { %>
+                        <span class="badge bg-success">已匹配</span>
+                      <% } else if(application.status === 2) { %>
+                        <span class="badge bg-danger">已拒绝</span>
+                      <% } else { %>
+                        <span class="badge bg-warning">待处理</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <a href="/job-applications/view/<%= application.application_id %>" class="btn btn-sm btn-primary">
+                        <i class="fas fa-eye"></i>
+                      </a>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-end mt-3">
+            <a href="/job-applications" class="btn btn-outline-primary">查看全部</a>
+          </div>
+        <% } else { %>
+          <p class="text-center">暂无申请记录</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 快捷操作 -->
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-plus-circle me-2"></i>快捷操作
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3 col-sm-6 mb-3">
+            <a href="/jobs/add" class="btn btn-primary w-100 py-3">
+              <i class="fas fa-plus-circle me-2"></i>添加职位
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6 mb-3">
+            <a href="/job-seekers/add" class="btn btn-success w-100 py-3">
+              <i class="fas fa-plus-circle me-2"></i>添加求职者
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6 mb-3">
+            <a href="/employers/add" class="btn btn-info w-100 py-3 text-white">
+              <i class="fas fa-plus-circle me-2"></i>添加用人单位
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6 mb-3">
+            <a href="/job-applications/add" class="btn btn-warning w-100 py-3 text-white">
+              <i class="fas fa-plus-circle me-2"></i>添加求职申请
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

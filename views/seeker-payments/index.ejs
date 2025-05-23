@@ -1,0 +1,88 @@
+<h1 class="mb-4">求职者缴费管理</h1>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="fas fa-credit-card me-2"></i>缴费记录列表</span>
+    <a href="/seeker-payments/add" class="btn btn-primary btn-sm">
+      <i class="fas fa-plus me-1"></i>添加缴费记录
+    </a>
+  </div>
+  <div class="card-body">
+    <% if(payments && payments.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>求职者姓名</th>
+              <th>联系电话</th>
+              <th>缴费金额</th>
+              <th>缴费日期</th>
+              <th>缴费方式</th>
+              <th>描述</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% payments.forEach(payment => { %>
+              <tr>
+                <td><a href="/job-seekers/view/<%= payment.seeker_id %>"><%= payment.seeker_name %></a></td>
+                <td><%= payment.phone %></td>
+                <td>¥<%= payment.amount.toFixed(2) %></td>
+                <td><%= new Date(payment.payment_date).toLocaleDateString() %></td>
+                <td><%= payment.payment_method %></td>
+                <td><%= payment.description || '-' %></td>
+                <td>
+                  <button class="btn btn-sm btn-danger delete-payment" data-id="<%= payment.payment_id %>">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>总计</th>
+              <td colspan="6">
+                ¥<%= payments.reduce((sum, payment) => sum + Number(payment.amount), 0).toFixed(2) %>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    <% } else { %>
+      <p class="text-center">暂无缴费记录</p>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 删除缴费记录事件
+    document.querySelectorAll('.delete-payment').forEach(button => {
+      button.addEventListener('click', function() {
+        const paymentId = this.getAttribute('data-id');
+        if(confirm('确定要删除此缴费记录吗？')) {
+          fetch(`/seeker-payments/delete/${paymentId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if(data.success) {
+              alert('删除成功');
+              location.reload();
+            } else {
+              alert('删除失败: ' + data.message);
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('删除请求失败');
+          });
+        }
+      });
+    });
+  });
+</script> 

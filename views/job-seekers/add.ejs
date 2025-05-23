@@ -1,0 +1,89 @@
+<h1 class="mb-4">添加求职者</h1>
+
+<div class="card">
+  <div class="card-header">
+    <i class="fas fa-plus-circle me-2"></i>新增求职者
+  </div>
+  <div class="card-body">
+    <!-- 错误提示 -->
+    <% if(typeof errors !== 'undefined' && errors.length > 0) { %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+
+    <form action="/job-seekers/add" method="POST">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="name" class="form-label">姓名 <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="name" name="name" required
+                 value="<%= typeof formData !== 'undefined' ? formData.name : '' %>">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="gender" class="form-label">性别 <span class="text-danger">*</span></label>
+          <select class="form-select" id="gender" name="gender" required>
+            <option value="" disabled selected>请选择性别</option>
+            <option value="M" <%= typeof formData !== 'undefined' && formData.gender === 'M' ? 'selected' : '' %>>男</option>
+            <option value="F" <%= typeof formData !== 'undefined' && formData.gender === 'F' ? 'selected' : '' %>>女</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="birth_date" class="form-label">出生日期</label>
+          <input type="date" class="form-control" id="birth_date" name="birth_date"
+                 value="<%= typeof formData !== 'undefined' ? formData.birth_date : '' %>">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="education" class="form-label">学历</label>
+          <select class="form-select" id="education" name="education">
+            <option value="" selected>请选择学历</option>
+            <option value="初中" <%= typeof formData !== 'undefined' && formData.education === '初中' ? 'selected' : '' %>>初中</option>
+            <option value="高中" <%= typeof formData !== 'undefined' && formData.education === '高中' ? 'selected' : '' %>>高中</option>
+            <option value="中专" <%= typeof formData !== 'undefined' && formData.education === '中专' ? 'selected' : '' %>>中专</option>
+            <option value="大专" <%= typeof formData !== 'undefined' && formData.education === '大专' ? 'selected' : '' %>>大专</option>
+            <option value="本科" <%= typeof formData !== 'undefined' && formData.education === '本科' ? 'selected' : '' %>>本科</option>
+            <option value="硕士" <%= typeof formData !== 'undefined' && formData.education === '硕士' ? 'selected' : '' %>>硕士</option>
+            <option value="博士" <%= typeof formData !== 'undefined' && formData.education === '博士' ? 'selected' : '' %>>博士</option>
+            <option value="其他" <%= typeof formData !== 'undefined' && formData.education === '其他' ? 'selected' : '' %>>其他</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="phone" class="form-label">联系电话 <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="phone" name="phone" required
+                 value="<%= typeof formData !== 'undefined' ? formData.phone : '' %>">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="email" class="form-label">电子邮箱</label>
+          <input type="email" class="form-control" id="email" name="email"
+                 value="<%= typeof formData !== 'undefined' ? formData.email : '' %>">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="address" class="form-label">地址</label>
+        <input type="text" class="form-control" id="address" name="address"
+               value="<%= typeof formData !== 'undefined' ? formData.address : '' %>">
+      </div>
+      <div class="mb-3">
+        <label for="skills" class="form-label">技能/特长</label>
+        <textarea class="form-control" id="skills" name="skills" rows="3"><%= typeof formData !== 'undefined' ? formData.skills : '' %></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="resume_path" class="form-label">简历路径</label>
+        <input type="text" class="form-control" id="resume_path" name="resume_path"
+               value="<%= typeof formData !== 'undefined' ? formData.resume_path : '' %>">
+        <div class="form-text">可以填写简历文件的存储路径或URL</div>
+      </div>
+      <div class="d-flex justify-content-between">
+        <a href="/job-seekers" class="btn btn-secondary">取消</a>
+        <button type="submit" class="btn btn-primary">保存</button>
+      </div>
+    </form>
+  </div>
+</div> 

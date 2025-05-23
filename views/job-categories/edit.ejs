@@ -1,0 +1,35 @@
+<h1 class="mb-4">编辑职业分类</h1>
+
+<div class="card">
+  <div class="card-header">
+    <i class="fas fa-edit me-2"></i>编辑职业分类
+  </div>
+  <div class="card-body">
+    <!-- 错误提示 -->
+    <% if(typeof errors !== 'undefined' && errors.length > 0) { %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+
+    <form action="/job-categories/edit/<%= category.category_id %>" method="POST">
+      <div class="mb-3">
+        <label for="category_name" class="form-label">分类名称 <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="category_name" name="category_name" required
+               value="<%= category.category_name %>">
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">描述</label>
+        <textarea class="form-control" id="description" name="description" rows="3"><%= category.description || '' %></textarea>
+      </div>
+      <div class="d-flex justify-content-between">
+        <a href="/job-categories" class="btn btn-secondary">取消</a>
+        <button type="submit" class="btn btn-primary">保存</button>
+      </div>
+    </form>
+  </div>
+</div> 

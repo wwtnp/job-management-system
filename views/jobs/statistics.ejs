@@ -1,0 +1,71 @@
+<h1 class="mb-4">职业统计信息</h1>
+
+<div class="card">
+  <div class="card-header">
+    <i class="fas fa-chart-bar me-2"></i>职业分布统计
+  </div>
+  <div class="card-body">
+    <% if(statistics && statistics.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>职位ID</th>
+              <th>职位名称</th>
+              <th>职业类别</th>
+              <th>用人单位</th>
+              <th>需求人数</th>
+              <th>已聘人数</th>
+              <th>剩余名额</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% statistics.forEach(stat => { %>
+              <tr>
+                <td><%= stat.job_id %></td>
+                <td><%= stat.title %></td>
+                <td><%= stat.category_name %></td>
+                <td><%= stat.employer_name %></td>
+                <td><%= stat.required_number %></td>
+                <td><%= stat.hired_number %></td>
+                <td><%= stat.remaining_positions %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="mt-4">
+        <h4>统计摘要</h4>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card text-center p-3 mb-3">
+              <h5>总需求人数</h5>
+              <h2 class="text-primary">
+                <%= statistics.reduce((sum, stat) => sum + parseInt(stat.required_number), 0) %>
+              </h2>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card text-center p-3 mb-3">
+              <h5>已聘人数</h5>
+              <h2 class="text-success">
+                <%= statistics.reduce((sum, stat) => sum + parseInt(stat.hired_number), 0) %>
+              </h2>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card text-center p-3 mb-3">
+              <h5>剩余名额</h5>
+              <h2 class="text-warning">
+                <%= statistics.reduce((sum, stat) => sum + parseInt(stat.remaining_positions), 0) %>
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } else { %>
+      <p class="text-center">暂无职业统计数据</p>
+    <% } %>
+  </div>
+</div> 

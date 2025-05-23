@@ -1,0 +1,93 @@
+<h1 class="mb-4">编辑职位</h1>
+
+<div class="card">
+  <div class="card-header">
+    <i class="fas fa-edit me-2"></i>编辑职位信息
+  </div>
+  <div class="card-body">
+    <!-- 错误提示 -->
+    <% if(typeof errors !== 'undefined' && errors.length > 0) { %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+
+    <form action="/jobs/edit/<%= job.job_id %>" method="POST">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="title" class="form-label">职位名称 <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="title" name="title" required
+                 value="<%= job.title %>">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="category_id" class="form-label">职业类别 <span class="text-danger">*</span></label>
+          <select class="form-select" id="category_id" name="category_id" required>
+            <% categories.forEach(category => { %>
+              <option value="<%= category.category_id %>" <%= job.category_id === category.category_id ? 'selected' : '' %>>
+                <%= category.category_name %>
+              </option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="employer_id" class="form-label">用人单位 <span class="text-danger">*</span></label>
+        <select class="form-select" id="employer_id" name="employer_id" required>
+          <% employers.forEach(employer => { %>
+            <option value="<%= employer.employer_id %>" <%= job.employer_id === employer.employer_id ? 'selected' : '' %>>
+              <%= employer.name %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">职位描述</label>
+        <textarea class="form-control" id="description" name="description" rows="4"><%= job.description || '' %></textarea>
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="required_number" class="form-label">需求人数 <span class="text-danger">*</span></label>
+          <input type="number" class="form-control" id="required_number" name="required_number" min="1" required
+                 value="<%= job.required_number %>">
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="hired_number" class="form-label">已聘人数</label>
+          <input type="number" class="form-control" id="hired_number" disabled
+                 value="<%= job.hired_number %>">
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="salary" class="form-label">薪资</label>
+          <input type="text" class="form-control" id="salary" name="salary" placeholder="例如：5000-8000或面议"
+                 value="<%= job.salary || '' %>">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="location" class="form-label">工作地点</label>
+          <input type="text" class="form-control" id="location" name="location"
+                 value="<%= job.location || '' %>">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="status" class="form-label">状态</label>
+          <select class="form-select" id="status" name="status">
+            <option value="active" <%= job.status === 'active' ? 'selected' : '' %>>招聘中</option>
+            <option value="filled" <%= job.status === 'filled' ? 'selected' : '' %>>已满</option>
+            <option value="closed" <%= job.status === 'closed' ? 'selected' : '' %>>已关闭</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="remarks" class="form-label">备注</label>
+        <textarea class="form-control" id="remarks" name="remarks" rows="2"><%= job.remarks || '' %></textarea>
+      </div>
+      <div class="d-flex justify-content-between">
+        <a href="/jobs" class="btn btn-secondary">取消</a>
+        <button type="submit" class="btn btn-primary">保存</button>
+      </div>
+    </form>
+  </div>
+</div> 

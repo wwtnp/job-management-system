@@ -1,0 +1,77 @@
+<h1 class="mb-4">职业分类管理</h1>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="fas fa-list me-2"></i>职业分类列表</span>
+    <a href="/job-categories/add" class="btn btn-primary btn-sm">
+      <i class="fas fa-plus me-1"></i>添加分类
+    </a>
+  </div>
+  <div class="card-body">
+    <% if(categories && categories.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>分类名称</th>
+              <th>描述</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% categories.forEach(category => { %>
+              <tr>
+                <td><%= category.category_id %></td>
+                <td><%= category.category_name %></td>
+                <td><%= category.description || '无' %></td>
+                <td>
+                  <a href="/job-categories/edit/<%= category.category_id %>" class="btn btn-sm btn-info text-white">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <button class="btn btn-sm btn-danger delete-category" data-id="<%= category.category_id %>">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <p class="text-center">暂无职业分类数据</p>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 删除分类事件
+    document.querySelectorAll('.delete-category').forEach(button => {
+      button.addEventListener('click', function() {
+        const categoryId = this.getAttribute('data-id');
+        if(confirm('确定要删除此职业分类吗？这可能会影响相关职位信息！')) {
+          fetch(`/job-categories/delete/${categoryId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if(data.success) {
+              alert('删除成功');
+              location.reload();
+            } else {
+              alert('删除失败: ' + data.message);
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('删除请求失败');
+          });
+        }
+      });
+    });
+  });
+</script> 

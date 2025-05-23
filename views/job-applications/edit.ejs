@@ -1,0 +1,50 @@
+<h1 class="mb-4">编辑求职申请</h1>
+
+<div class="card">
+  <div class="card-header">
+    <i class="fas fa-edit me-2"></i>编辑求职申请状态
+  </div>
+  <div class="card-body">
+    <!-- 错误提示 -->
+    <% if(typeof errors !== 'undefined' && errors.length > 0) { %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+
+    <form action="/job-applications/edit/<%= application.application_id %>" method="POST">
+      <div class="mb-3">
+        <label class="form-label">职位</label>
+        <p class="form-control-plaintext"><%= application.job_title %></p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">求职者</label>
+        <p class="form-control-plaintext"><%= application.seeker_name %></p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">申请日期</label>
+        <p class="form-control-plaintext"><%= new Date(application.application_date).toLocaleDateString() %></p>
+      </div>
+      <div class="mb-3">
+        <label for="status" class="form-label">状态 <span class="text-danger">*</span></label>
+        <select class="form-select" id="status" name="status" required>
+          <option value="0" <%= application.status === 0 ? 'selected' : '' %>>待处理</option>
+          <option value="1" <%= application.status === 1 ? 'selected' : '' %>>已匹配</option>
+          <option value="2" <%= application.status === 2 ? 'selected' : '' %>>已拒绝</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="remarks" class="form-label">备注</label>
+        <textarea class="form-control" id="remarks" name="remarks" rows="3"><%= application.remarks || '' %></textarea>
+      </div>
+      <div class="d-flex justify-content-between">
+        <a href="/job-applications" class="btn btn-secondary">取消</a>
+        <button type="submit" class="btn btn-primary">保存</button>
+      </div>
+    </form>
+  </div>
+</div> 

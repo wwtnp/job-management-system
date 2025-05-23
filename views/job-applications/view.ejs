@@ -1,0 +1,74 @@
+<h1 class="mb-4">求职申请详情</h1>
+
+<div class="card mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="fas fa-info-circle me-2"></i>申请信息</span>
+    <div>
+      <a href="/job-applications/edit/<%= application.application_id %>" class="btn btn-sm btn-primary">
+        <i class="fas fa-edit me-1"></i>编辑
+      </a>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <table class="table">
+          <tr>
+            <th style="width: 150px;">申请ID</th>
+            <td><%= application.application_id %></td>
+          </tr>
+          <tr>
+            <th>求职者</th>
+            <td><a href="/job-seekers/view/<%= application.seeker_id %>"><%= application.seeker_name %></a></td>
+          </tr>
+          <tr>
+            <th>职位</th>
+            <td><a href="/jobs/view/<%= application.job_id %>"><%= application.job_title %></a></td>
+          </tr>
+          <tr>
+            <th>申请日期</th>
+            <td><%= new Date(application.application_date).toLocaleDateString() %></td>
+          </tr>
+          <tr>
+            <th>状态</th>
+            <td>
+              <% if(application.status === 1) { %>
+                <span class="badge bg-success">已匹配</span>
+              <% } else if(application.status === 2) { %>
+                <span class="badge bg-danger">已拒绝</span>
+              <% } else { %>
+                <span class="badge bg-warning">待处理</span>
+              <% } %>
+            </td>
+          </tr>
+          <tr>
+            <th>备注</th>
+            <td><%= application.remarks || '无' %></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-between">
+  <a href="/job-applications" class="btn btn-secondary">返回列表</a>
+  <% if(application.status === 0) { %>
+    <div>
+      <form id="approve-form" class="d-inline" action="/job-applications/edit/<%= application.application_id %>" method="POST">
+        <input type="hidden" name="status" value="1">
+        <input type="hidden" name="remarks" value="<%= application.remarks || '' %>">
+        <button type="submit" class="btn btn-success">
+          <i class="fas fa-check me-1"></i>批准申请
+        </button>
+      </form>
+      <form id="reject-form" class="d-inline" action="/job-applications/edit/<%= application.application_id %>" method="POST">
+        <input type="hidden" name="status" value="2">
+        <input type="hidden" name="remarks" value="<%= application.remarks || '' %>">
+        <button type="submit" class="btn btn-danger">
+          <i class="fas fa-times me-1"></i>拒绝申请
+        </button>
+      </form>
+    </div>
+  <% } %>
+</div> 
