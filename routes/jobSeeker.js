@@ -24,7 +24,7 @@ router.post('/add', [
   body('name').notEmpty().withMessage('姓名不能为空'),
   body('gender').isIn(['男', '女']).withMessage('性别必须为"男"或"女"'),
   body('phone').notEmpty().withMessage('联系电话不能为空'),
-  body('email').isEmail().withMessage('请输入有效的邮箱地址'),
+  body('email').optional().isEmail().withMessage('请输入有效的邮箱地址'),
 ], async (req, res) => {
   // 验证请求
   const errors = validationResult(req);
@@ -38,7 +38,7 @@ router.post('/add', [
   try {
     await JobSeeker.create({
       name: req.body.name,
-      gender: req.body.gender,
+      gender: req.body.gender === '男' ? 'M' : 'F',
       birth_date: req.body.birth_date,
       education: req.body.education,
       phone: req.body.phone,
@@ -51,7 +51,8 @@ router.post('/add', [
     res.redirect('/job-seekers');
   } catch (error) {
     console.error('Error creating job seeker:', error);
-    res.status(500).send('服务器错误');
+    console.error('Error details:', JSON.stringify(error, null, 2));
+    res.status(500).send('服务器错误: ' + error.message);
   }
 });
 
@@ -96,7 +97,7 @@ router.post('/edit/:id', [
   body('name').notEmpty().withMessage('姓名不能为空'),
   body('gender').isIn(['男', '女']).withMessage('性别必须为"男"或"女"'),
   body('phone').notEmpty().withMessage('联系电话不能为空'),
-  body('email').isEmail().withMessage('请输入有效的邮箱地址'),
+  body('email').optional().isEmail().withMessage('请输入有效的邮箱地址'),
 ], async (req, res) => {
   // 验证请求
   const errors = validationResult(req);
@@ -113,7 +114,7 @@ router.post('/edit/:id', [
   try {
     const result = await JobSeeker.update(req.params.id, {
       name: req.body.name,
-      gender: req.body.gender,
+      gender: req.body.gender === '男' ? 'M' : 'F',
       birth_date: req.body.birth_date,
       education: req.body.education,
       phone: req.body.phone,
@@ -131,7 +132,8 @@ router.post('/edit/:id', [
     res.redirect('/job-seekers');
   } catch (error) {
     console.error('Error updating job seeker:', error);
-    res.status(500).send('服务器错误');
+    console.error('Error details:', JSON.stringify(error, null, 2));
+    res.status(500).send('服务器错误: ' + error.message);
   }
 });
 

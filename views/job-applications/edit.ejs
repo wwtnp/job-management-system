@@ -15,6 +15,13 @@
         </ul>
       </div>
     <% } %>
+    
+    <!-- 自定义错误消息 -->
+    <% if(typeof customError !== 'undefined') { %>
+      <div class="alert alert-danger">
+        <%= customError %>
+      </div>
+    <% } %>
 
     <form action="/job-applications/edit/<%= application.application_id %>" method="POST">
       <div class="mb-3">

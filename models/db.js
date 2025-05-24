@@ -141,6 +141,14 @@ const JobSeeker = {
     return rows[0];
   },
   create: async (seeker) => {
+    // 处理可能为空的字段
+    const birth_date = seeker.birth_date || null;
+    const education = seeker.education || null;
+    const email = seeker.email || null;
+    const address = seeker.address || null;
+    const skills = seeker.skills || null;
+    const resume_path = seeker.resume_path || null;
+
     const [result] = await pool.query(
       `INSERT INTO job_seeker 
        (name, gender, birth_date, education, phone, email, address, skills, resume_path) 
@@ -148,18 +156,27 @@ const JobSeeker = {
       [
         seeker.name, 
         seeker.gender, 
-        seeker.birth_date, 
-        seeker.education, 
+        birth_date, 
+        education, 
         seeker.phone, 
-        seeker.email, 
-        seeker.address, 
-        seeker.skills,
-        seeker.resume_path
+        email, 
+        address, 
+        skills,
+        resume_path
       ]
     );
     return result.insertId;
   },
   update: async (id, seeker) => {
+    // 处理可能为空的字段
+    const birth_date = seeker.birth_date || null;
+    const education = seeker.education || null;
+    const email = seeker.email || null;
+    const address = seeker.address || null;
+    const skills = seeker.skills || null;
+    const resume_path = seeker.resume_path || null;
+    const hired_status = seeker.hired_status !== undefined ? seeker.hired_status : 0;
+    
     const [result] = await pool.query(
       `UPDATE job_seeker SET 
        name = ?, gender = ?, birth_date = ?, education = ?, 
@@ -168,14 +185,14 @@ const JobSeeker = {
       [
         seeker.name, 
         seeker.gender, 
-        seeker.birth_date, 
-        seeker.education, 
+        birth_date, 
+        education, 
         seeker.phone, 
-        seeker.email, 
-        seeker.address, 
-        seeker.skills,
-        seeker.resume_path,
-        seeker.hired_status,
+        email, 
+        address, 
+        skills,
+        resume_path,
+        hired_status,
         id
       ]
     );
