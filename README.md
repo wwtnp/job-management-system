@@ -85,6 +85,14 @@ npm run dev
 6. **employer_payment** - 用人单位费用表
 7. **seeker_payment** - 求职者费用表
 
+## 系统截图
+![image](https://github.com/user-attachments/assets/e187fb3a-6e73-4462-be55-a57c0b101c02)
+
+![image](https://github.com/user-attachments/assets/21470a3a-9abe-465e-aed7-77dd0c0d120f)
+
+![image](https://github.com/user-attachments/assets/26329e70-dd19-4697-b57c-235f061329c3)
+
+
 
 ## 作者
 
