@@ -3,7 +3,7 @@
 <div class="card">
   <div class="card-header d-flex justify-content-between align-items-center">
     <span><i class="fas fa-credit-card me-2"></i>缴费记录列表</span>
-    <a href="/employers-payments/add" class="btn btn-primary btn-sm">
+    <a href="/employer-payments/add" class="btn btn-primary btn-sm">
       <i class="fas fa-plus me-1"></i>添加缴费记录
     </a>
   </div>
@@ -25,7 +25,7 @@
             <% payments.forEach(payment => { %>
               <tr>
                 <td><a href="/employers/view/<%= payment.employer_id %>"><%= payment.employer_name %></a></td>
-                <td>¥<%= payment.amount.toFixed(2) %></td>
+                <td>¥<%= Number(payment.amount).toFixed(2) %></td>
                 <td><%= new Date(payment.payment_date).toLocaleDateString() %></td>
                 <td><%= payment.payment_method %></td>
                 <td><%= payment.description || '-' %></td>
@@ -60,7 +60,7 @@
       button.addEventListener('click', function() {
         const paymentId = this.getAttribute('data-id');
         if(confirm('确定要删除此缴费记录吗？')) {
-          fetch(`/employers-payments/delete/${paymentId}`, {
+          fetch(`/employer-payments/delete/${paymentId}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

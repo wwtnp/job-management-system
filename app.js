@@ -36,7 +36,7 @@ app.use('/jobs', jobRoutes);
 app.use('/employers', employerRoutes);
 app.use('/job-seekers', jobSeekerRoutes);
 app.use('/job-applications', jobApplicationRoutes);
-app.use('/employers-payments', employerPaymentRoutes);
+app.use('/employer-payments', employerPaymentRoutes);
 app.use('/seeker-payments', seekerPaymentRoutes);
 
 // 首页路由

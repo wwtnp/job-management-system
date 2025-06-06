@@ -65,7 +65,7 @@
               <tbody>
                 <% payments.forEach(payment => { %>
                   <tr>
-                    <td>¥<%= payment.amount.toFixed(2) %></td>
+                    <td>¥<%= Number(payment.amount).toFixed(2) %></td>
                     <td><%= new Date(payment.payment_date).toLocaleDateString() %></td>
                     <td><%= payment.payment_method %></td>
                     <td><%= payment.description || '-' %></td>

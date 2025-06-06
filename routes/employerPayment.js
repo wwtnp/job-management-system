@@ -44,17 +44,30 @@ router.post('/add', [
       });
     }
 
-    await EmployerPayment.create({
+    console.log('正在创建缴费记录:', {
       employer_id: req.body.employer_id,
       amount: req.body.amount,
       payment_method: req.body.payment_method,
       description: req.body.description
     });
+
+    try {
+      const paymentId = await EmployerPayment.create({
+        employer_id: req.body.employer_id,
+        amount: req.body.amount,
+        payment_method: req.body.payment_method,
+        description: req.body.description
+      });
+      console.log('缴费记录创建成功，ID:', paymentId);
+      res.redirect('/employer-payments');
+    } catch (createError) {
+      console.error('创建缴费记录时发生错误:', createError);
+      throw createError;
+    }
     
-    res.redirect('/employers-payments');
   } catch (error) {
     console.error('Error creating payment record:', error);
-    res.status(500).send('服务器错误');
+    res.status(500).send('服务器错误: ' + error.message);
   }
 });
 

@@ -16,7 +16,7 @@
       </div>
     <% } %>
 
-    <form action="/employers-payments/add" method="POST">
+    <form action="/employer-payments/add" method="POST">
       <div class="mb-3">
         <label for="employer_id" class="form-label">选择用人单位 <span class="text-danger">*</span></label>
         <select class="form-select" id="employer_id" name="employer_id" required>
@@ -52,7 +52,7 @@
         <textarea class="form-control" id="description" name="description" rows="3"><%= typeof formData !== 'undefined' ? formData.description : '' %></textarea>
       </div>
       <div class="d-flex justify-content-between">
-        <a href="/employers-payments" class="btn btn-secondary">取消</a>
+        <a href="/employer-payments" class="btn btn-secondary">取消</a>
         <button type="submit" class="btn btn-primary">保存</button>
       </div>
     </form>

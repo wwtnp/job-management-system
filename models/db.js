@@ -292,11 +292,30 @@ const EmployerPayment = {
     return rows[0];
   },
   create: async (payment) => {
-    const [result] = await pool.query(
-      'INSERT INTO employer_payment (employer_id, amount, payment_method, description) VALUES (?, ?, ?, ?)',
-      [payment.employer_id, payment.amount, payment.payment_method, payment.description]
-    );
-    return result.insertId;
+    try {
+      console.log('EmployerPayment.create 参数:', payment);
+      // 确保参数类型正确
+      const employer_id = parseInt(payment.employer_id, 10);
+      const amount = parseFloat(payment.amount);
+      
+      // 检查参数有效性
+      if (isNaN(employer_id) || employer_id <= 0) {
+        throw new Error('无效的用人单位ID');
+      }
+      if (isNaN(amount) || amount <= 0) {
+        throw new Error('无效的缴费金额');
+      }
+      
+      const [result] = await pool.query(
+        'INSERT INTO employer_payment (employer_id, amount, payment_method, description) VALUES (?, ?, ?, ?)',
+        [employer_id, amount, payment.payment_method, payment.description]
+      );
+      console.log('插入缴费记录成功，结果:', result);
+      return result.insertId;
+    } catch (err) {
+      console.error('创建缴费记录错误:', err);
+      throw err;
+    }
   },
   update: async (id, payment) => {
     const [result] = await pool.query(
